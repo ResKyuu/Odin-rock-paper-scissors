@@ -3,7 +3,7 @@
 
 
 function generateComputerChoice() {
-    // Generates a Random number between 0 and 3.
+    // Generates a Random number between 1 and 3.
     let numChoice = Math.floor(Math.random() * 3) + 1;
 
     switch(numChoice) {
@@ -15,3 +15,9 @@ function generateComputerChoice() {
     }
 }
 console.log(generateComputerChoice());
+
+function getUserChoice() {
+    let strChoice = prompt("Enter your choice [Rock/Paper/Scissors]");
+    return strChoice;
+}
+console.log(getUserChoice());
