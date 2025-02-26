@@ -62,7 +62,19 @@ function announceWinner() {
     } else {
         console.log("You lost! You had a score of " + userScore + " and the PC had a score of " + pcScore);
     }
-    return;
+    playAgain();
+}
+
+function playAgain() {
+
+    let answer = prompt("Do you want to play again? [Y/N]");
+    if (answer === "Y") {
+        userScore = 0;
+        pcScore = 0;
+        playGame();
+    } else {
+        return;
+    }
 }
 
 function playGame() {
