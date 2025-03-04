@@ -7,16 +7,20 @@ const btnPaper = document.querySelector('#btnPaper');
 const btnScissors = document.querySelector('#btnScissors');
 const currentRound = document.querySelector('#currentRound');
 const winnerAnnounce = document.querySelector('#winnerAnnounce');
+const buttons = document.querySelector('#buttons');
 
 btnRock.addEventListener("click", () => {
+    currentRound.innerHTML = "";
         playGame("Rock");
 })
 
 btnPaper.addEventListener("click", () => {
+    currentRound.innerHTML = "";
         playGame("Paper");
 })
 
 btnScissors.addEventListener("click", () => {
+    currentRound.innerHTML = "";
         playGame("Scissors");
 })
 
@@ -39,11 +43,14 @@ function playGame(userChoice) {
     const roundScore = document.createElement('p');
     const pcChoice = generatePcChoice();
 
-    currentRound.innerHTML = "";
+
 
     if (userChoice === pcChoice) {
         roundOutcome.textContent = `It's a tie! | Computer chose: ${pcChoice} - You chose: ${userChoice}!`;
         currentRound.appendChild(roundOutcome);
+
+        roundScore.textContent = `Your score: ${userScore} | Computer Score: ${pcScore}`;
+        currentRound.appendChild(roundScore);
     } else if (
         (userChoice === "Rock" && pcChoice === "Scissors") ||
         (userChoice === "Paper" && pcChoice === "Rock") ||
@@ -53,29 +60,36 @@ function playGame(userChoice) {
         currentRound.appendChild(roundOutcome);
         userScore++;
         if (userScore === 3) {
+            currentRound.innerHTML = "";
             announceWinner();
+        } else {
+            roundScore.textContent = `Your score: ${userScore} | Computer Score: ${pcScore}`;
+            currentRound.appendChild(roundScore);
         }
     } else {
         roundOutcome.textContent = `Computer wins! | Computer chose: ${pcChoice} - You chose: ${userChoice}!`;
         currentRound.appendChild(roundOutcome);
         pcScore++;
         if (pcScore === 3) {
+            currentRound.innerHTML = "";
             announceWinner();
+        } else {
+            roundScore.textContent = `Your score: ${userScore} | Computer Score: ${pcScore}`;
+            currentRound.appendChild(roundScore);
         }
     }
 
-    roundScore.textContent = `Your score: ${userScore} | Computer Score: ${pcScore}`;
-    currentRound.appendChild(roundScore);
+
 }
 
 function announceWinner() {
     const winner = document.createElement('p');
     if (userScore === 3) {
-        winner.textContent = "User Wins! You had a score of " + userScore + " and the Computer had a score of " + pcScore
+        winner.textContent = `Player Wins! > Player Score: ${userScore} | Computer Score: ${pcScore}`;
         currentRound.innerHTML = "";
         winnerAnnounce.appendChild(winner);
     } else {
-        winner.textContent = "Computer Wins! You had a score of " + userScore + " and the Computer had a score of " + pcScore
+        winner.textContent = `Computer Wins! > Computer Score: ${pcScore} | Player Score: ${userScore}`;
         currentRound.innerHTML = "";
         winnerAnnounce.appendChild(winner);
     }
@@ -84,14 +98,21 @@ function announceWinner() {
 
 function playAgain() {
 
-    let answer = prompt("Do you want to play again? [Y/N]");
-    if (answer === "Y") {
+    buttons.style.display = "none";
+
+    const playAgainBtn = document .createElement("button");
+    playAgainBtn.textContent = "Play Again?";
+    winnerAnnounce.appendChild(playAgainBtn);
+
+    playAgainBtn.addEventListener("click", () => {
         userScore = 0;
         pcScore = 0;
         winnerAnnounce.innerHTML = "";
-    } else {
-        return;
-    }
+        buttons.style.display = "block";
+        playAgainBtn.remove();
+
+    })
+
 }
 
 
