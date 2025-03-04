@@ -2,9 +2,26 @@
 let userScore = 0;
 let pcScore = 0;
 
+const btnRock = document.querySelector('#btnRock');
+const btnPaper = document.querySelector('#btnPaper');
+const btnScissors = document.querySelector('#btnScissors');
+const currentRound = document.querySelector('#currentRound');
+const winnerAnnounce = document.querySelector('#winnerAnnounce');
+
+btnRock.addEventListener("click", () => {
+        playGame("Rock");
+})
+
+btnPaper.addEventListener("click", () => {
+        playGame("Paper");
+})
+
+btnScissors.addEventListener("click", () => {
+        playGame("Scissors");
+})
 
 function generatePcChoice() {
-    // Generates a Random number between 1 and 3.
+
     let numChoice = Math.floor(Math.random() * 3) + 1;
 
     switch(numChoice) {
@@ -17,50 +34,50 @@ function generatePcChoice() {
 
 }
 
-function getUserChoice() {
-    let strChoice = prompt("Enter your choice [Rock/Paper/Scissors]");
-    return strChoice;
-}
-
-function checkSpelling() {
-    let strChoice = getUserChoice();
-    if (strChoice != "Rock" || strChoice != "Paper" || strChoice != "Scissors") {
-        strChoice.toLowerCase()
-        const userChoice = strChoice.charAt(0).toUpperCase() + strChoice.slice(1);
-        return userChoice;
-    } else {
-        return strChoice;
-
-    }
-}
-
-function checkWinner() {
-    const userChoice = checkSpelling();
-    console.log("User: " + userChoice);
+function playGame(userChoice) {
+    const roundOutcome = document.createElement('p');
+    const roundScore = document.createElement('p');
     const pcChoice = generatePcChoice();
-    console.log("PC: " + pcChoice);
 
-    if(userChoice === pcChoice){
-        console.log("It's a tie!")
+    currentRound.innerHTML = "";
+
+    if (userChoice === pcChoice) {
+        roundOutcome.textContent = `It's a tie! | Computer chose: ${pcChoice} - You chose: ${userChoice}!`;
+        currentRound.appendChild(roundOutcome);
     } else if (
         (userChoice === "Rock" && pcChoice === "Scissors") ||
         (userChoice === "Paper" && pcChoice === "Rock") ||
         (userChoice === "Scissors" && pcChoice === "Paper")
     ) {
-        console.log("You win!")
+        roundOutcome.textContent = `You win! | Computer chose: ${pcChoice} - You chose: ${userChoice}!`;
+        currentRound.appendChild(roundOutcome);
         userScore++;
+        if (userScore === 3) {
+            announceWinner();
+        }
     } else {
-        console.log("Computer wins!")
+        roundOutcome.textContent = `Computer wins! | Computer chose: ${pcChoice} - You chose: ${userChoice}!`;
+        currentRound.appendChild(roundOutcome);
         pcScore++;
+        if (pcScore === 3) {
+            announceWinner();
+        }
     }
-    return;
+
+    roundScore.textContent = `Your score: ${userScore} | Computer Score: ${pcScore}`;
+    currentRound.appendChild(roundScore);
 }
 
 function announceWinner() {
+    const winner = document.createElement('p');
     if (userScore === 3) {
-        console.log("User Wins! You had a score of " + userScore + " and the PC had a score of " + pcScore);
+        winner.textContent = "User Wins! You had a score of " + userScore + " and the Computer had a score of " + pcScore
+        currentRound.innerHTML = "";
+        winnerAnnounce.appendChild(winner);
     } else {
-        console.log("You lost! You had a score of " + userScore + " and the PC had a score of " + pcScore);
+        winner.textContent = "Computer Wins! You had a score of " + userScore + " and the Computer had a score of " + pcScore
+        currentRound.innerHTML = "";
+        winnerAnnounce.appendChild(winner);
     }
     playAgain();
 }
@@ -71,18 +88,10 @@ function playAgain() {
     if (answer === "Y") {
         userScore = 0;
         pcScore = 0;
-        playGame();
+        winnerAnnounce.innerHTML = "";
     } else {
         return;
     }
 }
 
-function playGame() {
-    while (userScore != 3 && pcScore != 3) {
-        checkWinner();
-        console.log("User Score: " + userScore + " Pc Score: " + pcScore);
-    }
-    announceWinner();
-}
 
-playGame();
